@@ -7,7 +7,7 @@ export const reducer = (state = {counter:0,islogged:false},action) => {
         case decrease:
             return {...state,counter:state.counter-1};
         case increaseByAmount:
-            return {...state,counter:(state.counter+action.payload)};
+            return {...state,counter:action.payload};
         case signin:
             return {...state,islogged:true};
         case signout:
