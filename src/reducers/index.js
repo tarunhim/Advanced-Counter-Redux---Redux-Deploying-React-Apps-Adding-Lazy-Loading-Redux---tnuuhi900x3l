@@ -1,18 +1,50 @@
-import { decrease, increase, increaseByAmount, signin, signout } from "../actions/action";
+const initialState = {
+    counter: 0,
+    islogged: false
+};
 
-export const reducer = (state = {counter:0,islogged:false},action) => {
-    switch(action.type) {
-        case increase:
-            return {...state,counter:state.counter+1};
-        case decrease:
-            return {...state,counter:state.counter-1};
-        case increaseByAmount:
-            return {...state,counter:action.payload};
-        case signin:
-            return {...state,islogged:true};
-        case signout:
-            return {...state,islogged:false};
+const reducer = (state = initialState, action) => {
+    
+    switch (action.type) {
+        case 'INCREMENT':
+            return {
+                ...state,
+                counter: state.counter + 1
+            };
+
+        case 'DECREMENT':
+            return {
+                ...state,
+                counter: state.counter - 1
+            };
+
+        case 'islogged': 
+            return {
+                ...state,
+                islogged: !state.islogged
+            };
+
+        case 'SIGN_IN': 
+            return {
+                ...state,
+                islogged: true
+            };
+
+        case 'SIGN_OUT': 
+            return {
+                ...state,
+                islogged: false
+            };
+            
+        case 'INCREMENTBYAMOUNT':
+            return {
+                ...state,
+                counter: action.payload
+            };
+
         default:
-            return state;
+            return state
     }
-}
+};
+
+export default reducer;
