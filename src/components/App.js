@@ -1,22 +1,54 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { increase, signin, signout, decrease, increaseByAmount } from '../actions/action';
+import { useDispatch, useSelector } from "react-redux";
+
+import { increment, decrement, addAmount, signIn, signOut } from "../actions/action";
 
 function App() {
-  const [input,setInput] = useState(2);
-  const {counter, islogged} = useSelector(state => state);
+  const [amount, setAmount] = useState(); 
+  const store = useSelector((store) => store);
   const dispatch = useDispatch();
+
+  const loginOrLogout = () => {
+    if(store.islogged === false) {
+      dispatch(signIn());
+    } else {
+      dispatch(signOut());
+    }
+  };
+
+  const inc = () => {
+    dispatch(increment());
+  }
+
+  const dec = () => {
+    dispatch(decrement());
+  }
+
+  const amountChange = (e) => {
+    setAmount(e.target.value);
+  };
+
+  const addAmountClick = () => {
+    if(amount === "" || amount === undefined || amount === null) {
+      dispatch(addAmount(2));
+    } else {
+      dispatch(addAmount(parseInt(amount)));
+    }
+  }
+
   return (
     <div id='main'>
-      <button onClick={() => dispatch(islogged ? {type:signout} : {type:signin})}>{islogged ? "Logout" : "Login"}</button>
-      {islogged && 
-      <>
-      <button onClick={() => dispatch({ type:increase })}>+</button>
-      <span data-testid='counter' >{counter}</span>
-      <button onClick={() => dispatch({type:decrease})} >-</button>
-      <input onChange={(e) => setInput(e.target.value)} type="number" value={input} />
-      <button onClick={() => dispatch( {type: increaseByAmount, payload:input} )} >Add amount</button>
-      </>}
+      <button onClick={loginOrLogout}>{store.islogged === false ? "Login" : "Logout"}</button>
+      {
+        store.islogged === false ? undefined :
+        <div>
+          <h3 data-testid="counter">{store.counter}</h3>
+          <button onClick={inc} style={{marginRight: 10+"px"}}>+</button>
+          <button onClick={dec} style={{marginRight: 10+"px"}}>-</button>
+          <input type="number" defaultValue={amount} onChange={(e) => amountChange(e)} />
+          <button onClick={addAmountClick}>Add amount</button>
+        </div>
+      }
     </div>
   );
 }
